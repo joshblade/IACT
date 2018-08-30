@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "virtualMachineName": {
+            "value": "reitestsql"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_DS2_v2"
+        },
+        "adminUsername": {
+            "value": "localadmin"
+        },
+        "virtualNetworkName": {
+            "value": "vnet"
+        },
+        "networkInterfaceName": {
+            "value": "reitestsql930"
+        },
+        "networkSecurityGroupName": {
+            "value": "reitestsql-nsg"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "storageAccountName": {
+            "value": "reidevopsstorage"
+        },
+        "subnetName": {
+            "value": "subnet-devops"
+        },
+        "publicIpAddressName": {
+            "value": "reitestsql-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Dynamic"
+        },
+        "sqlConnectivityType": {
+            "value": "Private"
+        },
+        "sqlPortNumber": {
+            "value": 1433
+        },
+        "sqlStorageDisksCount": {
+            "value": 1
+        },
+        "sqlStorageWorkloadType": {
+            "value": "GENERAL"
+        },
+        "sqlStorageDisksConfigurationType": {
+            "value": "NEW"
+        },
+        "sqlStorageStartingDeviceId": {
+            "value": 2
+        },
+        "sqlStorageDeploymentToken": {
+            "value": 59690
+        },
+        "sqlAutopatchingDayOfWeek": {
+            "value": "Sunday"
+        },
+        "sqlAutopatchingStartHour": {
+            "value": "2"
+        },
+        "sqlAutopatchingWindowDuration": {
+            "value": "60"
+        },
+        "sqlAuthenticationLogin": {
+            "value": "localadmin"
+        },
+        "sqlAuthenticationPassword": {
+            "value": null
+        },
+        "rServicesEnabled": {
+            "value": "false"
+        }
+    }
+}

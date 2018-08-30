@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_chefrb_name": {
+            "value": null
+        },
+        "networkInterfaces_nic_chefrb_name": {
+            "value": null
+        },
+        "publicIPAddresses_vip_chefrb_name": {
+            "value": null
+        },
+        "virtualNetworks_cheftestvnet_name": {
+            "value": null
+        },
+        "storageAccounts_rbchefstorage_name": {
+            "value": null
+        },
+        "extensions_chefinstall_name": {
+            "value": null
+        },
+        "subnets_chefSubnet_name": {
+            "value": null
+        }
+    }
+}

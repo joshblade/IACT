@@ -1,0 +1,246 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_chefrb_name": {
+            "defaultValue": "chefrb",
+            "type": "String"
+        },
+        "networkInterfaces_nic_chefrb_name": {
+            "defaultValue": "nic-chefrb",
+            "type": "String"
+        },
+        "publicIPAddresses_vip_chefrb_name": {
+            "defaultValue": "vip-chefrb",
+            "type": "String"
+        },
+        "virtualNetworks_cheftestvnet_name": {
+            "defaultValue": "cheftestvnet",
+            "type": "String"
+        },
+        "storageAccounts_rbchefstorage_name": {
+            "defaultValue": "rbchefstorage",
+            "type": "String"
+        },
+        "extensions_chefinstall_name": {
+            "defaultValue": "chefinstall",
+            "type": "String"
+        },
+        "subnets_chefSubnet_name": {
+            "defaultValue": "chefSubnet",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Compute/virtualMachines/chefrb'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_chefrb_name')]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "17.04",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_chefrb_name'),'_osDisk')]",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_rbchefstorage_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_chefrb_name'),'_os.vhd'))]"
+                        },
+                        "caching": "ReadWrite",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_chefrb_name')]",
+                    "adminUsername": "devopsadmin",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_nic_chefrb_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_rbchefstorage_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_rbchefstorage_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_nic_chefrb_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Network/networkInterfaces/nic-chefrb'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_nic_chefrb_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "36506729-9429-467c-a0ca-ac0cb9e988c1",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"acea5a74-d648-4e9b-b387-5c0a4d0524eb\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "192.168.1.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vip_chefrb_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cheftestvnet_name'), parameters('subnets_chefSubnet_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "a05a2q5i0liupfmed2lkbvwvpb.bx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-11-AB-E7",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "virtualMachine": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_chefrb_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vip_chefrb_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cheftestvnet_name'), parameters('subnets_chefSubnet_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_chefrb_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Network/publicIPAddresses/vip-chefrb'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_vip_chefrb_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "12308b79-4f37-4749-a50f-7de3ab429207",
+                "ipAddress": "13.90.159.0",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "chefrb",
+                    "fqdn": "chefrb.eastus.cloudapp.azure.com"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Network/virtualNetworks/cheftestvnet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_cheftestvnet_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "430ebe06-d2e8-47d1-9584-1f16a0d6d579",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "192.168.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "chefSubnet",
+                        "etag": "W/\"8ee0fd9a-3298-43a0-8526-64861dfaddf5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "192.168.1.0/24"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Storage/storageAccounts/rbchefstorage'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_rbchefstorage_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "eastus",
+            "tags": {},
+            "scale": null,
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Compute/virtualMachines/chefrb/extensions/chefinstall'.",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualMachines_chefrb_name'), '/', parameters('extensions_chefinstall_name'))]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.4",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://rbchefstorage.blob.core.windows.net/scripts/setup.sh?sv=2016-05-31&sr=b&sig=YVPg3KGlvAAA5K%2F7TsiGimATBljZKWnmUn1I3JOsR0k%3D&se=2017-09-19T20%3A23%3A59Z&sp=r"
+                    ],
+                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -file setup.sh "
+                },
+                "protectedSettings": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_chefrb_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/765843cc-b249-4a49-bf05-ac76e27dab94/resourceGroups/rgcheftest/providers/Microsoft.Network/virtualNetworks/cheftestvnet/subnets/chefSubnet'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_cheftestvnet_name'), '/', parameters('subnets_chefSubnet_name'))]",
+            "apiVersion": "2017-06-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "192.168.1.0/24"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_cheftestvnet_name'))]"
+            ]
+        }
+    ]
+}
